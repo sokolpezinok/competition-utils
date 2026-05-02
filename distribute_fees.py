@@ -55,4 +55,4 @@ for person_entry in tree.getroot().findall("iof:PersonEntry", NS):
 
 
 ET.indent(tree)
-ET.dump(tree)
+tree.write(sys.stdout.buffer, encoding="UTF-8", xml_declaration=True)
