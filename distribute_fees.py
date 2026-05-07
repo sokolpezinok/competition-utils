@@ -13,7 +13,10 @@ ET.indent(tree)
 payments = defaultdict(float)
 if len(sys.argv) >= 3:
     with open(sys.argv[2], newline="", encoding="utf-8-sig") as f:
-        for row in csv.DictReader(f):
+        sample = f.read(2048)
+        dialect = csv.Sniffer().sniff(sample)
+        f.seek(0)
+        for row in csv.DictReader(f, dialect=dialect):
             club = row["Názov klubu"]
             amount = float(row["Suma"].rstrip("€"))
             payments[club] += amount
