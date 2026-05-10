@@ -20,14 +20,14 @@ club_points = {}
 classes = set()
 for class_result in tree.getroot().findall("iof:ClassResult", NS):
     clas = class_result.find("./iof:Class/iof:Name", NS).text
+    if clas == "MWR":
+        continue
     classes.add(clas)
     for person_result in class_result.findall("./iof:PersonResult", NS):
         status = person_result.find("./iof:Result/iof:Status", NS)
         if status is None or status.text != "OK":
             continue
         position = int(person_result.find("./iof:Result/iof:Position", NS).text)
-        if position >= 4:
-            continue
         club = person_result.find("./iof:Organisation", NS)
         if club is None:
             continue
@@ -37,7 +37,7 @@ for class_result in tree.getroot().findall("iof:ClassResult", NS):
         if club not in club_points:
             club_points[club] = {}
 
-        points = POSITION_POINTS[position]
+        points = POSITION_POINTS.get(position, 0)
         club_points[club][clas] = club_points[club].setdefault(clas, 0) + points
 
 csv_writer = csv.writer(sys.stdout)
